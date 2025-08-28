@@ -38,31 +38,57 @@ function RegisterPage() {
       console.log(error);
     }
   };
-  return <div>
-    <h1>Register</h1>
-    <form onSubmit={handleSubmit}>
-        <input type="email" 
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        />
-        <input type="password" 
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        />
-        <input type="password" 
-        placeholder="Confirm Password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-    </form>
-    <div>
-        <p>Already have an account? <a href="/login">Login</a>
-        </p>
+  return (
+    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+        <h1 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white">
+          Registration Page
+        </h1>
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <input
+            className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <input
+            className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <div>
+            <button
+              type="submit"
+              className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+            >
+              Sign Up
+            </button>
+          </div>
+        </form>
+        <div>
+          <p className="mt-10 text-center text-sm/6 text-gray-400">
+            Already have an account?{""}
+            <a
+              href="/login"
+              className="font-semibold text-indigo-400 hover:text-indigo-300"
+            >
+              Login
+            </a>
+          </p>
+        </div>
+      </div>
     </div>
-  </div>;
+  );
 }
-
 
 export default RegisterPage;
