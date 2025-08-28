@@ -1,4 +1,4 @@
-"use client"; // This component must be a client component
+"use client"; 
 
 import {
   ImageKitAbortError,
