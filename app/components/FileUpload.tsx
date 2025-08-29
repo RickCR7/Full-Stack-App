@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 import {
   ImageKitAbortError,
@@ -9,8 +9,15 @@ import {
 } from "@imagekit/next";
 import { useState } from "react";
 
+interface ImageKitUploadResponse {
+  url: string;
+  fileId: string;
+  name: string;
+  // Add more fields as needed based on ImageKit docs
+}
+
 interface FileUploadProps {
-  onSuccess: (res: any) => void;
+  onSuccess: (res: ImageKitUploadResponse) => void;
   onProgress?: (progress: number) => void;
   fileType?: "image" | "video";
 }
@@ -19,15 +26,14 @@ const FileUpload = ({ onSuccess, onProgress, fileType }: FileUploadProps) => {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  //optional
-  const validateFile = (file: File) => {
-    if (fileType === "video") {
-      if (!file.type.startsWith("video/mp4")) {
-        setError("Please upload a valid video file");
-      }
+  const validateFile = (file: File): boolean => {
+    if (fileType === "video" && !file.type.startsWith("video/mp4")) {
+      setError("Please upload a valid video file");
+      return false;
     }
     if (file.size > 100 * 1024 * 1024) {
       setError("File size must be less than 100 MB");
+      return false;
     }
     return true;
   };
@@ -44,7 +50,7 @@ const FileUpload = ({ onSuccess, onProgress, fileType }: FileUploadProps) => {
       const authRes = await fetch("/api/auth/imagekit-auth");
       const auth = await authRes.json();
 
-      const res = await upload({
+      const res: ImageKitUploadResponse = await upload({
         file,
         fileName: file.name,
         publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY!,
@@ -63,16 +69,15 @@ const FileUpload = ({ onSuccess, onProgress, fileType }: FileUploadProps) => {
       onSuccess(res);
     } catch (error) {
       if (error instanceof ImageKitAbortError) {
-        console.error("Upload aborted:", error.reason);
+        setError("Upload aborted: " + error.reason);
       } else if (error instanceof ImageKitInvalidRequestError) {
-        console.error("Invalid request:", error.message);
+        setError("Invalid request: " + error.message);
       } else if (error instanceof ImageKitUploadNetworkError) {
-        console.error("Network error:", error.message);
+        setError("Network error: " + error.message);
       } else if (error instanceof ImageKitServerError) {
-        console.error("Server error:", error.message);
+        setError("Server error: " + error.message);
       } else {
-        // Handle any other errors that may occur.
-        console.error("Upload error:", error);
+        setError("Upload error: " + String(error));
       }
     } finally {
       setUploading(false);
@@ -85,10 +90,10 @@ const FileUpload = ({ onSuccess, onProgress, fileType }: FileUploadProps) => {
         type="file"
         accept={fileType === "video" ? "video/*" : "image/*"}
         onChange={handleFileChange}
+        className="mb-2"
       />
       {uploading && <span>Loading...</span>}
-      <br />
-      Upload progress: <progress value={progress} max={100}></progress>
+      {error && <span className="text-red-500 block mt-2">{error}</span>}
     </>
   );
 };

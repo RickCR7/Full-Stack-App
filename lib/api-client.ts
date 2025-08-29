@@ -1,10 +1,10 @@
-import {IVideo} from "@/models/Video";
+import { IVideo } from "@/models/Video";
 
-export type VideoFormFata = Omit<IVideo, "_id">
+export type VideoFormData = Omit<IVideo, "_id">;
 
 type FetchOptions = {
   method?: "GET" | "POST" | "PUT" | "DELETE";
-  body?: any;
+  body?: unknown;
   headers?: Record<string, string>;
 };
 
@@ -32,15 +32,15 @@ class ApiClient {
   }
 
   async getVideos() {
-    return this.fetch("/videos")
+    return this.fetch<IVideo[]>("/videos");
   }
 
-  async createVideo(videoData: VideoFormFata) {
-    return this.fetch("/videos", {
-        method: "POST",
-        body: videoData
-    })
+  async createVideo(videoData: VideoFormData) {
+    return this.fetch<IVideo>("/videos", {
+      method: "POST",
+      body: videoData,
+    });
   }
 }
 
-export const apiClient = new ApiClient()
+export const apiClient = new ApiClient();
