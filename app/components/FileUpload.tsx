@@ -50,7 +50,7 @@ const FileUpload = ({ onSuccess, onProgress, fileType }: FileUploadProps) => {
       const authRes = await fetch("/api/auth/imagekit-auth");
       const auth = await authRes.json();
 
-      const res: ImageKitUploadResponse = await upload({
+      const res = (await upload({
         file,
         fileName: file.name,
         publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY!,
@@ -64,7 +64,7 @@ const FileUpload = ({ onSuccess, onProgress, fileType }: FileUploadProps) => {
             onProgress(Math.round(percent));
           }
         },
-      });
+      })) as ImageKitUploadResponse;
 
       onSuccess(res);
     } catch (error) {
