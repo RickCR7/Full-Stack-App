@@ -60,7 +60,7 @@ function LoginPage() {
           </button>
         </form>
         <div className="mt-10 text-center text-sm/6 text-gray-400">
-          Don't have an account ?
+          Do not have an account ?
           <button
             className="font-semibold text-blue-700 hover:text-indigo-300"
             onClick={() => router.push("/register")}
